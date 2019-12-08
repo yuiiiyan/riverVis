@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<Document>
+	<name>00a1</name>
+	<GroundOverlay>
+		<name>Flat Raster</name>
+		<Icon>
+			<href>9843222d-b7af-49fc-bc85-886f2e84aae0.png</href>
+		</Icon>
+		<LatLonBox>
+			<north>28.1777730469</north>
+			<south>28.1766541387</south>
+			<east>113.0702699056</east>
+			<west>113.0696996407</west>
+		</LatLonBox>
+	</GroundOverlay>
+	<GroundOverlay>
+		<name>Shaded Relief</name>
+		<Icon>
+			<href>c5e0c295-5a95-492a-9f04-5bd10593fe65.png</href>
+		</Icon>
+		<LatLonBox>
+			<north>28.1777640234468</north>
+			<south>28.1766631621532</south>
+			<east>113.070259722298</east>
+			<west>113.069709824002</west>
+		</LatLonBox>
+	</GroundOverlay>
+	<Document>
+		<name>Isobaths</name>
+		<Style id="style.#FFF0F8FA..0.255">
+			<LineStyle>
+				<width>0</width>
+			</LineStyle>
+			<PolyStyle>
+				<color>fffaf8f0</color>
+				<outline>0</outline>
+			</PolyStyle>
+		</Style>
+		<Style id="style.#FF00B7EF..0.255">
+			<LineStyle>
+				<width>0</width>
+			</LineStyle>
+			<PolyStyle>
+				<color>ffefb700</color>
+				<outline>0</outline>
+			</PolyStyle>
+		</Style>
+		<Placemark>
+			<name>0-3m</name>
+			<styleUrl>#style.#FF00B7EF..0.255</styleUrl>
+			<Polygon>
+				<tessellate>1</tessellate>
+				<outerBoundaryIs>
+					<LinearRing>
+						<coordinates>
+							113.070259722,28.177621696,0 113.070239355,28.177623312,0 113.070218989,28.177624395,0 113.070178255,28.177631822,0 113.070096789,28.177651394,0 113.070035689,28.177662057,0 113.070015323,28.177673788,0 113.069994956,28.177673788,0 113.069994956,28.177691835,0 113.070015323,28.177709882,0 113.070015323,28.177727929,0 113.070035689,28.177745976,0 113.070056056,28.177764023,0 113.070076422,28.17778207,0 113.070259722,28.17778207,0 113.070259722,28.177621696,0 
+						</coordinates>
+					</LinearRing>
+				</outerBoundaryIs>
+			</Polygon>
+		</Placemark>
+		<Placemark>
+			<name>0-3m</name>
+			<styleUrl>#style.#FF00B7EF..0.255</styleUrl>
+			<Polygon>
+				<tessellate>1</tessellate>
+				<outerBoundaryIs>
+					<LinearRing>
+						<coordinates>
+							113.069933856,28.176663162,0 113.069709824,28.176663162,0 113.069709824,28.176699255,0 113.069689457,28.176699255,0 113.069689457,28.176735349,0 113.069709824,28.176753396,0 113.06973019,28.176738527,0 113.069770923,28.176734555,0 113.069811657,28.176726904,0 113.069872756,28.176710554,0 113.069893123,28.176708625,0 113.069954223,28.176708625,0 113.069954223,28.176699255,0 113.069933856,28.176681209,0 113.069933856,28.176663162,0 
+						</coordinates>
+					</LinearRing>
+				</outerBoundaryIs>
+			</Polygon>
+		</Placemark>
+		<Placemark>
+			<name>3-6m</name>
+			<styleUrl>#style.#FFF0F8FA..0.255</styleUrl>
+			<Polygon>
+				<tessellate>1</tessellate>
+				<outerBoundaryIs>
+					<LinearRing>
+						<coordinates>
+							113.069954223,28.176699255,0 113.069954223,28.176708625,0 113.069893123,28.176708625,0 113.069872756,28.176710554,0 113.069811657,28.176726904,0 113.069770923,28.176734555,0 113.06973019,28.176738527,0 113.069709824,28.176753396,0 113.069689457,28.176735349,0 113.069689457,28.176879725,0 113.069709824,28.176897771,0 113.069709824,28.176933865,0 113.06973019,28.176951912,0 113.06973019,28.176988006,0 113.069750557,28.177006053,0 113.069750557,28.177042147,0 113.069770923,28.177060194,0 113.069770923,28.177096287,0 113.06979129,28.177114334,0 113.06979129,28.177150428,0 113.069811657,28.177168475,0 113.069811657,28.177222616,0 113.069832023,28.177240663,0 113.069832023,28.17727675700001,0 113.06985239,28.177294803,0 113.06985239,28.177330897,0 113.069872756,28.177348944,0 113.069872756,28.177385038,0 113.069893123,28.17740308500001,0 113.069893123,28.177457226,0 113.06991349,28.177475273,0 113.06991349,28.177511366,0 113.069933856,28.177529413,0 113.069933856,28.177565507,0 113.069954223,28.177583554,0 113.069954223,28.177637695,0 113.069974589,28.177655742,0 113.069994956,28.177673788,0 113.070015323,28.177673788,0 113.070035689,28.177662057,0 113.070096789,28.177651394,0 113.070178255,28.177631822,0 113.070218989,28.177624395,0 113.070239355,28.177623312,0 113.070259722,28.177621696,0 113.070259722,28.177186522,0 113.070239355,28.177168475,0 113.070239355,28.177132381,0 113.070218989,28.177114334,0 113.070218989,28.177078241,0 113.070198622,28.177060194,0 113.070198622,28.1770241,0 113.070178255,28.177006053,0 113.070178255,28.176988006,0 113.070157889,28.176969959,0 113.070137522,28.176951912,0 113.070137522,28.176933865,0 113.070117156,28.176915818,0 113.070117156,28.176897771,0 113.070096789,28.176879725,0 113.070076422,28.176861678,0 113.070076422,28.176843631,0 113.070056056,28.176825584,0 113.070056056,28.176807537,0 113.070035689,28.17678949,0 113.070015323,28.176771443,0 113.069994956,28.176753396,0 113.069994956,28.176735349,0 113.069974589,28.176717302,0 113.069954223,28.176699255,0 
+						</coordinates>
+					</LinearRing>
+				</outerBoundaryIs>
+			</Polygon>
+		</Placemark>
+	</Document>
+	<Document>
+		<name>Major Contours</name>
+		<Style id="style..#FF000000.1.255">
+			<LineStyle>
+				<color>ff000000</color>
+				<gx:labelVisibility>1</gx:labelVisibility>
+			</LineStyle>
+			<PolyStyle>
+				<fill>0</fill>
+			</PolyStyle>
+		</Style>
+		<Placemark>
+			<name>3m</name>
+			<styleUrl>#style..#FF000000.1.255</styleUrl>
+			<LineString>
+				<tessellate>1</tessellate>
+				<altitudeMode>relativeToGround</altitudeMode>
+				<coordinates>
+					113.069954223,28.176708625,1 113.069893123,28.176708625,1 113.069872756,28.176710554,1 113.069811657,28.176726904,1 113.069770923,28.176734555,1 113.06973019,28.176738527,1 
+				</coordinates>
+			</LineString>
+		</Placemark>
+		<Placemark>
+			<name>3m</name>
+			<styleUrl>#style..#FF000000.1.255</styleUrl>
+			<LineString>
+				<tessellate>1</tessellate>
+				<altitudeMode>relativeToGround</altitudeMode>
+				<coordinates>
+					113.070239355,28.177623312,1 113.070259722,28.177621696,1 
+				</coordinates>
+			</LineString>
+		</Placemark>
+		<Placemark>
+			<name>3m</name>
+			<styleUrl>#style..#FF000000.1.255</styleUrl>
+			<LineString>
+				<tessellate>1</tessellate>
+				<altitudeMode>relativeToGround</altitudeMode>
+				<coordinates>
+					113.070239355,28.177623312,1 113.070218989,28.177624395,1 113.070178255,28.177631822,1 113.070096789,28.177651394,1 113.070035689,28.177662057,1 
+				</coordinates>
+			</LineString>
+		</Placemark>
+	</Document>
+	<Document>
+		<name>Minor Contours</name>
+		<Style id="style..#FF666666.1.255">
+			<LineStyle>
+				<color>ff666666</color>
+			</LineStyle>
+			<PolyStyle>
+				<fill>0</fill>
+			</PolyStyle>
+		</Style>
+		<Placemark>
+			<name>4.5m</name>
+			<styleUrl>#style..#FF666666.1.255</styleUrl>
+			<LineString>
+				<tessellate>1</tessellate>
+				<altitudeMode>relativeToGround</altitudeMode>
+				<coordinates>
+					113.069994956,28.176763431,1 113.069933856,28.176763431,1 113.06991349,28.176766669,1 113.069872756,28.176778761,1 113.069832023,28.176794513,1 113.06979129,28.17679996,1 113.06973019,28.176801657,1 
+				</coordinates>
+			</LineString>
+		</Placemark>
+		<Placemark>
+			<name>4.5m</name>
+			<styleUrl>#style..#FF666666.1.255</styleUrl>
+			<LineString>
+				<tessellate>1</tessellate>
+				<altitudeMode>relativeToGround</altitudeMode>
+				<coordinates>
+					113.070239355,28.17757374,1 113.070259722,28.177572988,1 
+				</coordinates>
+			</LineString>
+		</Placemark>
+		<Placemark>
+			<name>4.5m</name>
+			<styleUrl>#style..#FF666666.1.255</styleUrl>
+			<LineString>
+				<tessellate>1</tessellate>
+				<altitudeMode>relativeToGround</altitudeMode>
+				<coordinates>
+					113.070239355,28.17757374,1 113.070218989,28.177573179,1 113.070218989,28.177573179,1 113.070198622,28.177575609,1 113.070178255,28.177576608,1 113.070137522,28.177575998,1 113.070137522,28.177575998,1 113.070117156,28.177576496,1 113.070096789,28.177578764,1 113.070078916,28.177583554,1 113.070035689,28.177591273,1 113.069994956,28.177592025,1 
+				</coordinates>
+			</LineString>
+		</Placemark>
+		<Placemark>
+			<name>0.75m</name>
+			<styleUrl>#style..#FF666666.1.255</styleUrl>
+			<LineString>
+				<tessellate>1</tessellate>
+				<altitudeMode>relativeToGround</altitudeMode>
+				<coordinates>
+					113.070259722,28.177722829,1 113.070239355,28.177722829,1 
+				</coordinates>
+			</LineString>
+		</Placemark>
+		<Placemark>
+			<name>0.75m</name>
+			<styleUrl>#style..#FF666666.1.255</styleUrl>
+			<LineString>
+				<tessellate>1</tessellate>
+				<altitudeMode>relativeToGround</altitudeMode>
+				<coordinates>
+					113.070196371,28.177745976,1 113.070198622,28.177737913,1 113.070218989,28.177730258,1 113.070223781,28.177727929,1 113.070239355,28.177722829,1 
+				</coordinates>
+			</LineString>
+		</Placemark>
+		<Placemark>
+			<name>2.25m</name>
+			<styleUrl>#style..#FF666666.1.255</styleUrl>
+			<LineString>
+				<tessellate>1</tessellate>
+				<altitudeMode>relativeToGround</altitudeMode>
+				<coordinates>
+					113.069834325,28.176681209,1 113.06985239,28.176673633,1 113.069872756,28.176673633,1 113.069893123,28.176673633,1 113.06991349,28.176673633,1 113.069933856,28.176673633,1 
+				</coordinates>
+			</LineString>
+		</Placemark>
+		<Placemark>
+			<name>2.25m</name>
+			<styleUrl>#style..#FF666666.1.255</styleUrl>
+			<LineString>
+				<tessellate>1</tessellate>
+				<altitudeMode>relativeToGround</altitudeMode>
+				<coordinates>
+					113.069834325,28.176681209,1 113.069832023,28.17668219,1 113.069811657,28.176689799,1 113.06979129,28.176695371,1 113.069780428,28.176699255,1 113.069770923,28.176701146,1 113.069750557,28.17670362100001,1 113.06973019,28.176704404,1 
+				</coordinates>
+			</LineString>
+		</Placemark>
+		<Placemark>
+			<name>2.25m</name>
+			<styleUrl>#style..#FF666666.1.255</styleUrl>
+			<LineString>
+				<tessellate>1</tessellate>
+				<altitudeMode>relativeToGround</altitudeMode>
+				<coordinates>
+					113.070239355,28.177646222,1 113.070259722,28.177644315,1 
+				</coordinates>
+			</LineString>
+		</Placemark>
+		<Placemark>
+			<name>2.25m</name>
+			<styleUrl>#style..#FF666666.1.255</styleUrl>
+			<LineString>
+				<tessellate>1</tessellate>
+				<altitudeMode>relativeToGround</altitudeMode>
+				<coordinates>
+					113.070239355,28.177646222,1 113.070218989,28.177647675,1 113.070178778,28.177655742,1 113.070117156,28.177673715,1 113.070076422,28.177681029,1 113.070056056,28.177688896,1 113.070035689,28.177688896,1 
+				</coordinates>
+			</LineString>
+		</Placemark>
+		<Placemark>
+			<name>1.5m</name>
+			<styleUrl>#style..#FF666666.1.255</styleUrl>
+			<LineString>
+				<tessellate>1</tessellate>
+				<altitudeMode>relativeToGround</altitudeMode>
+				<coordinates>
+					113.070239355,28.177673313,1 113.070259722,28.177670148,1 
+				</coordinates>
+			</LineString>
+		</Placemark>
+		<Placemark>
+			<name>1.5m</name>
+			<styleUrl>#style..#FF666666.1.255</styleUrl>
+			<LineString>
+				<tessellate>1</tessellate>
+				<altitudeMode>relativeToGround</altitudeMode>
+				<coordinates>
+					113.070239355,28.177673313,1 113.070218989,28.177675917,1 113.070076422,28.177718019,1 113.070056056,28.177718019,1 
+				</coordinates>
+			</LineString>
+		</Placemark>
+		<Placemark>
+			<name>3.75m</name>
+			<styleUrl>#style..#FF666666.1.255</styleUrl>
+			<LineString>
+				<tessellate>1</tessellate>
+				<altitudeMode>relativeToGround</altitudeMode>
+				<coordinates>
+					113.069974589,28.176732912,1 113.06991349,28.176732912,1 113.069896556,28.176735349,1 113.069811657,28.17676055900001,1 113.069770923,28.176766986,1 113.06973019,28.176770181,1 
+				</coordinates>
+			</LineString>
+		</Placemark>
+		<Placemark>
+			<name>3.75m</name>
+			<styleUrl>#style..#FF666666.1.255</styleUrl>
+			<LineString>
+				<tessellate>1</tessellate>
+				<altitudeMode>relativeToGround</altitudeMode>
+				<coordinates>
+					113.070259722,28.177600389,1 113.070244759,28.177601601,1 113.070239355,28.177601966,1 
+				</coordinates>
+			</LineString>
+		</Placemark>
+		<Placemark>
+			<name>3.75m</name>
+			<styleUrl>#style..#FF666666.1.255</styleUrl>
+			<LineString>
+				<tessellate>1</tessellate>
+				<altitudeMode>relativeToGround</altitudeMode>
+				<coordinates>
+					113.070239355,28.177601966,1 113.070218989,28.177602274,1 113.070137522,28.177613848,1 113.070040781,28.177637695,1 113.070015323,28.177638804,1 
+				</coordinates>
+			</LineString>
+		</Placemark>
+		<Placemark>
+			<name>5.25m</name>
+			<styleUrl>#style..#FF666666.1.255</styleUrl>
+			<LineString>
+				<tessellate>1</tessellate>
+				<altitudeMode>relativeToGround</altitudeMode>
+				<coordinates>
+					113.070056056,28.176821012,1 113.069974589,28.176821012,1 113.069893123,28.176847439,1 113.06985239,28.176852596,1 113.06979129,28.176852846,1 113.069750557,28.176848254,1 113.06973019,28.176848254,1 
+				</coordinates>
+			</LineString>
+		</Placemark>
+		<Placemark>
+			<name>5.25m</name>
+			<styleUrl>#style..#FF666666.1.255</styleUrl>
+			<LineString>
+				<tessellate>1</tessellate>
+				<altitudeMode>relativeToGround</altitudeMode>
+				<coordinates>
+					113.070225098,28.177511366,1 113.070198622,28.177504778,1 113.070174861,28.177493319,1 113.070111026,28.177421132,1 113.070076422,28.177394551,1 113.070056056,28.17738629100001,1 113.069974589,28.177376586,1 113.069974589,28.177376586,1 113.06991349,28.177387271,1 113.069933856,28.177387271,1 
+				</coordinates>
+			</LineString>
+		</Placemark>
+		<Placemark>
+			<name>5.25m</name>
+			<styleUrl>#style..#FF666666.1.255</styleUrl>
+			<LineString>
+				<tessellate>1</tessellate>
+				<altitudeMode>relativeToGround</altitudeMode>
+				<coordinates>
+					113.070239355,28.177513295,1 113.070225098,28.177511366,1 
+				</coordinates>
+			</LineString>
+		</Placemark>
+	</Document>
+</Document>
+</kml>
