@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="LogMapper">
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		lid,
+		userid,
+		logtype,
+		function,
+		logcontent,
+		logtime,
+		ip,
+		remark
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{lid},
+		#{userid},
+		#{logtype},
+		#{function},
+		#{logcontent},
+		#{logtime},
+		#{ip},
+		#{remark}
+	</sql>
+	
+	<!--表名 -->
+	<sql id="tableName">
+		log
+	</sql>
+	<sql id="usersName">
+		users
+	</sql>
+	<sql id="areaName">
+		area
+	</sql>
+	
+	<!-- 通过用户id和时间查找日志列表 -->
+	<select id="getLoglistPage" parameterType="page" resultType="pd">
+		select  DISTINCT
+		lid,
+		l.userid as userid,
+		logtype,
+		function,
+		logcontent,
+		logtime,
+		ip,
+		l.remark,username
+		from 
+		<include refid="tableName"></include> l,<include refid="usersName"></include> u,<include refid="areaName"></include> a
+		where l.userid=u.userid and u.aid = a.aid
+			<choose>
+				<when test="pd.aidlist!=null and pd.aidlist!='' and pd.aidlist.size>0">
+					and a.aid in 
+					<foreach collection="pd.aidlist" index="index" item="item" open="(" separator="," close=")">
+			            '${item}'
+			        </foreach>	
+				</when>
+				<otherwise>and a.aid is null</otherwise>
+			</choose>
+		<if test="pd.unamekey != null and pd.unamekey != ''">
+				and UserName LIKE CONCAT(CONCAT('%', #{pd.unamekey}),'%')
+			</if> 
+		<if test="pd.logtype!=null and pd.logtype!=''">
+			and logtype = #{pd.logtype} 
+		</if>
+		<if test="pd.lastLoginStart!=null and pd.lastLoginStart!=''"><!-- 登录时间检索 -->
+			and logtime &gt;= #{pd.lastLoginStart} 
+		</if>
+		<if test="pd.lastLoginEnd!=null and pd.lastLoginEnd!=''"><!-- 登录时间检索 -->
+			and logtime &lt;= #{pd.lastLoginEnd} 
+		</if>
+		order by logtime desc
+	</select>
+	<!-- 通过编号获取列表(全部，excel导出) -->
+	<select id="getLogListByIds" parameterType="pd" resultType="pd" >
+		SELECT DISTINCT lid,
+		l.userid as userid,
+		logtype,
+		function,
+		logcontent,
+		logtime,
+		ip,
+		l.remark,username
+		from <include refid="tableName"></include> l,<include refid="usersName"></include> u
+		where l.userid=u.userid
+			<choose>
+				<when test="ids !=null and ids !='' and ids.size>0">
+					and lid in 
+					<foreach collection="ids" index="index" item="item" open="(" separator="," close=")">
+			            '${item}'
+			        </foreach>	
+				</when>
+				<otherwise>and lid is null</otherwise>
+			</choose>
+		order by logtime desc	
+	</select>
+	<!-- 添加 -->
+	<insert id="saveLog" parameterType="pd">
+		insert into 
+		<include refid="tableName"></include>
+		(
+		userid,
+		logtype,
+		function,
+		logcontent,
+		logtime,
+		ip,
+		remark
+		) values (
+		#{userid},
+		#{logtype},
+		#{function},
+		#{logcontent},
+		#{logtime},
+		#{ip},
+		#{remark}
+		)
+	</insert>
+</mapper>

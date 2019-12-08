@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="RainStatisticsMapper">
+	<!-- 字段 -->
+	<sql id="Field">
+		id,
+		type,
+		rid,
+		rname,
+		data,
+		time,
+		timeM,
+		timeD
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{id},
+		#{type},
+		#{rid},
+		#{rname},
+		#{data},
+		#{time},
+		#{timeM},
+		#{timeD}
+	</sql>
+	
+	<!--表名 -->
+	<sql id="tableName">
+		rain_data_kaihui
+	</sql>
+	<sql id="table">
+		rain_data_kaihui1
+	</sql>
+	
+	<!-- 列出所有-->
+	<select id="getRainStatistics" parameterType="String" resultType="RainStatistics" >
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+ 		 <where> 		 
+ 	    	  <if test="pd.key1 !=null and pd.key1 != ''"> 
+ 		       and time LIKE CONCAT(CONCAT('%',#{pd.key1}),'%')  
+<!-- 		where  rname=#{str}  and time >= NOW() - interval 8 day; -->            
+             </if> 
+            	  <if test="pd.key2 !=null and pd.key2 != ''">  
+  		     and timeM LIKE CONCAT(CONCAT('%',#{pd.key2}),'%')        
+                  </if>     
+                  
+                <if test="pd.key3 !=null and pd.key3 != ''">  
+  		      and timeD LIKE CONCAT(CONCAT('%',#{pd.key3}),'%')         
+              </if>   
+      </where> 
+	</select>
+	
+<!-- 列出预测-->
+	<select id="getRains" parameterType="String" resultType="RainStatistics" > 
+ 		select 
+ 		<include refid="Field"></include> 
+ 		from 
+ 		<include refid="table"></include> 		
+ 		 <where> 		 
+ 	    	   <if test="pd.key1 !=null and pd.key1 != ''"> 
+ 		       and time LIKE CONCAT(CONCAT('%',#{pd.key1}),'%')  
+<!-- 		where  rname=#{str}  and time >= NOW() - interval 8 day; -->            
+             </if> 
+            	  <if test="pd.key2 !=null and pd.key2 != ''">  
+  		     and timeM LIKE CONCAT(CONCAT('%',#{pd.key2}),'%')        
+                  </if>     
+                  
+                <if test="pd.key3 !=null and pd.key3 != ''">  
+  		      and timeD LIKE CONCAT(CONCAT('%',#{pd.key3}),'%')         
+              </if>   
+      </where> 
+	</select> 
+</mapper>

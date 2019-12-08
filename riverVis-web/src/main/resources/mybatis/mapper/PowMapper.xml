@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="PowMapper">
+<!-- 应急广播系统管理账号对用户信息的修改 -->
+	<!--表名 -->
+	<sql id="powTable">
+		torrent
+	</sql>
+	
+	<!-- 判断用户名和密码 -->
+	<select id="getPowlist" parameterType="pd" resultType="Pow">
+		SELECT 
+		dataid,
+		IMEI,
+		pow1,
+		grouppow,
+		outv1,
+		outv2,
+		v24,
+		v28,
+		extendpow,
+		solarpow,
+		charge,
+		work,
+		time,
+		IP
+		from <include refid="powTable"/>
+		where IMEI=#{id} and time between #{begintime} AND #{endtime}
+		order by time asc
+	</select>
+	<select id="getnowPow" parameterType="pd" resultType="Pow">
+		SELECT *
+		from <include refid="powTable"/>
+		where IMEI=#{id}
+		order by time desc
+		limit 0,1
+	</select>
+	
+	<select id="getOrgnzlistPage" parameterType="Page" resultType="pd">
+		select  
+			dataid,
+			IMEI,
+			pow1,
+			grouppow,
+			outv1,
+			outv2,
+			v24,
+			v28,
+			extendpow,
+			solarpow,
+			charge,
+			work,
+			time,
+			IP		 
+		from <include refid="powTable"/>
+		<where>
+			
+			
+			<if test="pd.val1 != null and pd.val1 != ''"> 
+				and ${pd.key1} LIKE CONCAT(CONCAT('%', #{pd.val1}),'%') 
+			</if> 
+			<if test="pd.val2 != null and pd.val2 != ''"> 
+					and ${pd.key2} LIKE CONCAT(CONCAT('%', #{pd.val2}),'%') 
+			</if> 
+			<if test="pd.val3 != null and pd.val3 != ''"> 
+					and ${pd.key3} LIKE CONCAT(CONCAT('%', #{pd.val3}),'%') 
+			</if> 
+		</where> 
+		order by time desc
+	</select>
+	<select id="getdataview" parameterType="pd" resultType="Pow">
+		select  
+			IMEI,
+			pow1,
+		grouppow,
+		outv1,
+		outv2,
+		v24,
+		v28,
+		extendpow,
+		solarpow,
+		time
+		from 
+			<include refid="powTable"></include>
+		where IMEI=#{IMEI}
+				
+		order by time asc
+
+	</select>
+</mapper>

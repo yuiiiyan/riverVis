@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="AreaMapper">
+	
+	<!-- ztree -->
+	<resultMap type="Area" id="areaZtreeResultMap">
+	<id column="aid" property="aid"/>
+	<result column="aname" property="aname"/>
+	<result column="parentaid" property="parentaid"/>
+	<result column="note" property="note"></result>
+	</resultMap>
+	<!-- 字段 -->
+	<sql id="Field">
+		aid,
+		parentaid,
+		aname,
+		note
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{aid},
+		#{parentaid},
+		#{aname},
+		#{note}
+	</sql>
+	
+	<!--表名 -->
+	<sql id="tableName">
+		area
+	</sql>
+	
+	<!--通过ID获取区域 -->
+	<select id="getAreaByAid" parameterType="String" resultType="Area">
+		select  
+			a1.aid as aid,
+			a1.parentaid as parentaid,
+			a1.aname as aname,
+			a1.note as note,
+			a2.aname as parentaname
+		from 
+			<include refid="tableName"></include> a1 left join <include refid="tableName"></include> a2 on a1.parentaid=a2.aid
+		where a1.aid = #{aid} 
+	</select>
+	<!--通过区域名模糊查询id列表 -->
+	<select id="getAidByAname" parameterType="String" resultType="String">
+		select  
+			aid
+		from 
+			<include refid="tableName"></include>
+		where aname LIKE CONCAT(CONCAT('%', #{aname}),'%')
+	</select>
+	<!--通过ID获取其子一级区域 -->
+	<select id="listSubAreaByParentAid" parameterType="String" resultMap="areaZtreeResultMap">
+		select  
+			a1.aid as aid,
+			a1.parentaid as parentaid,
+			a1.aname as aname,
+			a1.note as note,
+			a2.aname as parentaname
+		from 
+			<include refid="tableName"></include> a1 left join <include refid="tableName"></include> a2 on a1.parentaid=a2.aid
+		where a1.parentaid = #{parentaid} order by (a1.aid+0) 
+	</select>
+	<!--查询所有区域列表 -->
+	<select id="listAllArea" parameterType="String" resultType="Area">
+		select  
+			<include refid="Field"></include>
+		from 
+			<include refid="tableName"></include>
+	</select>
+
+	<!--新增区域 -->
+	<insert id="insertArea" parameterType="Area">
+		insert into 
+			<include refid="tableName"></include> 
+		(
+			<include refid="Field"></include>
+		) values (
+			<include refid="FieldValue"></include>
+		)
+	</insert>
+	
+	<!--取最大ID-->
+	<select id="findCurLevelMaxId" parameterType="pd" resultType="pd">
+		select MAX(aid) AID from 
+		<include refid="tableName"></include>
+	</select>
+	
+	<!--删除区域-->
+	<delete id="deleteAreaByAid" parameterType="String">
+		delete from 
+		<include refid="tableName"></include> 
+		where aid=#{aid} 
+	</delete>
+	
+	<!--编辑区域 -->
+	<update id="updateArea" parameterType="pd">
+		update 
+		<include refid="tableName"></include> 
+		set parentaid=#{parentaid},
+			aname=#{aname},
+			note=#{note}
+		where 
+			aid=#{aid}
+	</update>
+	<!--查询用户编号获取分组列表 -->
+	<select id="getAreasByUserid" parameterType="pd" resultType="Area">
+		select  
+			<include refid="Field"></include>
+		from 
+			<include refid="tableName"></include>
+		<if test="userid!=null and  userid !=''">
+		where userid=#{userid}
+		</if>
+	</select>
+</mapper>

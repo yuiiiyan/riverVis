@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD SQL Map Config 3.0//EN"  
+	"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+	
+	<settings> 
+        <setting name="cacheEnabled" value="true" /><!-- 全局映射器启用缓存 -->   
+        <setting name="useGeneratedKeys" value="true" /> 
+        <setting name="defaultExecutorType" value="REUSE" /> 
+    </settings>
+
+	<typeAliases>
+		<typeAlias type="com.infopublic.entity.Area" alias="Area"/>
+		<typeAlias type="com.infopublic.entity.Log" alias="Log"/>
+		<typeAlias type="com.infopublic.entity.Menu" alias="Menu"/>
+		<typeAlias type="com.infopublic.entity.Role" alias="Role"/>
+		<typeAlias type="com.infopublic.entity.Users" alias="Users"/>
+		<typeAlias type="com.infopublic.entity.Organization" alias="Organization"/>
+		<typeAlias type="com.infopublic.entity.Pow" alias="Pow"/>
+
+		<typeAlias type="com.infopublic.entity.Receive" alias="Receive"/>
+		<typeAlias type="com.infopublic.entity.Terminal" alias="Terminal"/>
+		<typeAlias type="com.infopublic.entity.Traffic" alias="Traffic"/>
+		<typeAlias type="com.infopublic.entity.SensorData" alias="SensorData"/>
+		<typeAlias type="com.infopublic.entity.WaterStatistics" alias="WaterStatistics"/>
+		<typeAlias type="com.infopublic.entity.SanweiData" alias="SanweiData"/>
+		<typeAlias type="com.infopublic.entity.RainStatistics" alias="RainStatistics"/>
+		<typeAlias type="com.infopublic.entity.River3DVis" alias="River3DVis"/>
+		
+		<typeAlias type="com.infopublic.util.PageData" alias="pd"/>
+		<!-- 分页 -->
+		<typeAlias type="com.infopublic.entity.Page" alias="Page"/>
+	    <typeAlias type="com.infopublic.entity.Warn" alias="Warn"/>
+	</typeAliases>
+	
+	<plugins>
+		<plugin interceptor="com.infopublic.plugin.PagePlugin">
+			<property name="dialect" value="mysql"/>
+			<property name="pageSqlId" value=".*listPage.*"/>
+		</plugin>
+	</plugins>
+	
+
+</configuration>

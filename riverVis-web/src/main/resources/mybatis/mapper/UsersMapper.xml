@@ -1,0 +1,483 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="UsersMapper">
+	<!--表名 -->
+	<sql id="usersTable">
+		users
+	</sql>
+	<sql id="roleTable">
+		role
+	</sql>
+	<sql id="areaTable">
+		area
+	</sql>
+	<sql id="Field">
+		userid,
+	usertypes,
+	loginid,
+	password,
+	username,
+	usex,
+	linktel,
+	uemail,
+	qq,
+	ucardid,
+	linkaddr,
+	note,
+	aid,
+	roleid,
+	isuse,
+	lastdate,
+	type
+	</sql>
+	<!-- 判断用户名和密码 -->
+	<select id="getUserInfo" parameterType="pd" resultType="Users">
+		SELECT ui.userid as userid,
+				username,
+				usertypes,
+				loginid,
+				password,
+				roleid,
+				linktel,
+				linkaddr,
+				isuse,
+				lastdate,
+				ui.note as note,
+				ui.aid as aid,
+				rname,
+				aname,
+				roletype,
+				menurights,
+				buttonrights
+		from (<include refid="usersTable"/> ui 
+		LEFT JOIN <include refid="roleTable"/> r on ui.roleid = r.rid)
+		LEFT JOIN <include refid="areaTable"/> a on ui.aid = a.aid
+		<where>
+			<if test="username!=null and password!=null">
+			and loginid = #{username} and PassWord=#{password} and isuse=1
+			</if>
+		</where>
+	</select>
+	
+	<!-- 获取系统管理账号列表(分页) -->
+	<select id="getUserslistPage" parameterType="page" resultType="Users" >
+		SELECT ui.userid as userid,
+				username,
+				usertypes,
+				loginid,
+				password,
+				roleid,
+				linktel,
+				linkaddr,
+				isuse,
+				lastdate,
+				ui.note as note,
+				ui.aid as aid,
+				rname,
+				aname,
+				roletype,
+				menurights,
+				buttonrights
+		from (<include refid="usersTable"/> ui 
+		LEFT JOIN <include refid="roleTable"/> r on ui.roleid = r.rid)
+		LEFT JOIN <include refid="areaTable"/> a on ui.aid = a.aid
+		<where>
+			<if test="pd.unamekey != null and pd.unamekey != ''">
+				and username LIKE CONCAT(CONCAT('%', #{pd.unamekey}),'%')
+			</if> 
+			<if test="pd.isusekey != null and pd.isusekey != ''">
+				and isuse =#{pd.isusekey}
+			</if> 
+			and type=0
+		</where> 
+	</select>
+	<!-- 获取系统终端管理用户列表(分页) -->
+	<select id="getUserInfolistPage" parameterType="page" resultType="Users" >
+		SELECT ui.userid as userid,
+				usertypes,
+				loginid,
+				password,
+				username,
+				usex,
+				linktel,
+				uemail,
+				qq,
+				ucardid,
+				linkaddr,
+				ui.note as note,
+				ui.aid as aid,
+				roleid,
+				isuse,
+				lastdate,
+				type,
+				rname,
+				aname,
+				roletype,
+				menurights,
+				buttonrights
+		from (<include refid="usersTable"/> ui 
+		LEFT JOIN <include refid="roleTable"/> r on ui.roleid = r.rid)
+		LEFT JOIN <include refid="areaTable"/> a on ui.aid = a.aid
+		<where>
+			<choose>
+				<when test="pd.aidlist!=null and pd.aidlist!='' and pd.aidlist.size>0">
+					and ui.aid in 
+					<foreach collection="pd.aidlist" index="index" item="item" open="(" separator="," close=")">
+			            ${item}
+			        </foreach>
+			        or 	ui.aid is null
+				</when>
+				<otherwise>and ui.aid is null</otherwise>
+			</choose>
+			<if test="pd.unamekey != null and pd.unamekey != ''">
+				and username LIKE CONCAT(CONCAT('%', #{pd.unamekey}),'%')
+			</if> 
+			<if test="pd.isusekey != null and pd.isusekey != ''">
+				and isuse =#{pd.isusekey}
+			</if>
+			and type=1
+		</where> 
+	</select>
+	<!-- 获取系统终端管理用户列表(不分页) -->
+	<select id="getAllUserInfoList" parameterType="pd" resultType="Users" >
+		SELECT ui.userid as userid,
+				usertypes,
+				loginid,
+				password,
+				username,
+				usex,
+				linktel,
+				uemail,
+				qq,
+				ucardid,
+				linkaddr,
+				ui.note as note,
+				ui.aid as aid,
+				roleid,
+				isuse,
+				lastdate,
+				type,
+				rname,
+				aname,
+				roletype,
+				menurights,
+				buttonrights
+		from (<include refid="usersTable"/> ui 
+		LEFT JOIN <include refid="roleTable"/> r on ui.roleid = r.rid)
+		LEFT JOIN <include refid="areaTable"/> a on ui.aid = a.aid
+		<where>
+			<choose>
+				<when test="aidlist!=null and aidlist!='' and aidlist.size>0">
+					and ui.aid in 
+					<foreach collection="aidlist" index="index" item="item" open="(" separator="," close=")">
+			            ${item}
+			        </foreach>
+			        or 	ui.aid is null
+				</when>
+				<otherwise>and ui.aid is null</otherwise>
+			</choose>
+			and type=1
+		</where> 
+	</select>
+	<!-- 通过userid获取数据 -->
+	<select id="findByUserid" parameterType="pd" resultType="Users" >
+		SELECT ui.userid as userid,
+				usertypes,
+				loginid,
+				password,
+				username,
+				usex,
+				linktel,
+				uemail,
+				qq,
+				ucardid,
+				linkaddr,
+				ui.note as note,
+				ui.aid as aid,
+				roleid,
+				isuse,
+				lastdate,
+				type,
+				rname,
+				roletype,
+				menurights,
+				buttonrights
+		from (<include refid="usersTable"/> ui 
+		LEFT JOIN <include refid="roleTable"/> r on ui.roleid = r.rid)
+		LEFT JOIN <include refid="areaTable"/> a on ui.aid = a.aid
+		where 
+			ui.userid = #{userid}
+	</select>
+	
+	<!-- 通过编号获取用户列表(全部，excel导出) -->
+	<select id="getUserListByIds" parameterType="pd" resultType="Users" >
+		SELECT ui.userid as userid,
+				usertypes,
+				loginid,
+				password,
+				username,
+				usex,
+				linktel,
+				uemail,
+				qq,
+				ucardid,
+				linkaddr,
+				ui.note as note,
+				ui.aid as aid,
+				roleid,
+				isuse,
+				lastdate,
+				type,
+				rname,
+				aname,
+				roletype,
+				menurights,
+				buttonrights
+		from (<include refid="usersTable"/> ui 
+		LEFT JOIN <include refid="roleTable"/> r on ui.roleid = r.rid)
+		LEFT JOIN <include refid="areaTable"/> a on ui.aid = a.aid
+		<where>
+			<choose>
+				<when test="userids!=null and userids!='' and userids.size>0">
+					and ui.userid in 
+					<foreach collection="userids" index="index" item="item" open="(" separator="," close=")">
+			            '${item}'
+			        </foreach>	
+				</when>
+				<otherwise>and ui.userid is null</otherwise>
+			</choose>
+		</where>
+		order by lastdate desc	
+	</select>
+	<select id="getUseridByLoginid" parameterType="String" resultType="String">
+		select userid from <include refid="usersTable"></include> 
+		where loginid=#{loginid}
+	</select>
+	
+	<!--根据分组编号列表查询用户列表-->
+	<select id="listUsersByAids" parameterType="pd" resultType="Users">
+		select  
+			<include refid="Field"></include>
+		from 
+			<include refid="usersTable"></include> 
+		<where>
+		<if test="aidlist!=null and aidlist!='' and aidlist.size>0">
+			aid in
+			<foreach collection="aidlist" index="index" item="item" open="(" separator="," close=")">
+				${item}
+			</foreach>
+		</if>
+		</where>
+	</select>
+	
+	<!-- 通过用户编号获取该用户的区域编号 -->
+	<select id="getAidByUserid" parameterType="String" resultType="String" >
+		SELECT aid	from <include refid="usersTable"/> 
+		where userid = #{userid}
+	</select>
+	<!-- 新增系统管理账号信息 -->
+	 <insert id="insertUserInfo" parameterType="pd" > 
+ 		insert into <include refid="usersTable"></include> ( 
+				username,
+				usertypes,
+				loginid,
+				password,
+				roleid,
+				aid,
+				linktel,
+				linkaddr,
+				note,
+				type
+		) values (
+			#{username},#{usertypes},#{loginid},#{password},#{roleid},#{aid},#{linktel},#{linkaddr},#{note},0
+		)
+ 	</insert>
+ 	<!-- <insert id="insertUserInfo" parameterType="pd" > 
+ 		insert into <include refid="usersTable"></include> ( 
+				username,
+				usertypes,
+				loginid,
+				password,
+				linktel,
+				linkaddr,
+				note,
+				aid,
+				roleid,
+				isuse,
+				lastdate,
+				type
+		) values (
+			#{username},#{usertype},#{loginid},#{password},#{usex},#{linktel},#{uemail},#{qq},#{ucardid},
+			#{linkaddr},#{note},#{aid},#{roleid},#{isuse},#{lastdate},0
+		)
+ 	</insert>-->
+	<!-- 新增终端用户信息 -->
+ 	<insert id="insertUser" parameterType="pd" > 
+ 		insert into <include refid="usersTable"></include> ( 
+				username,
+				loginid,
+				password,
+				linktel,
+<!-- 				usex, -->
+<!-- 				uemail, -->
+<!-- 				qq, -->
+<!-- 				ucardid, -->
+				linkaddr,
+				note,
+				aid,
+				roleid,
+				isuse,
+				lastdate,
+				type
+		) values (
+			#{username},#{loginid},#{password},#{linktel},
+<!-- 			#{usex},#{uemail},#{qq},#{ucardid}, -->
+			#{linkaddr},#{note},#{aid},#{roleid},#{isuse},#{lastdate},1
+		)
+ 	</insert>
+	<!-- 修改用户密码 -->
+	<update id="editUserPwd" parameterType="pd" >
+ 		update <include refid="usersTable"></include>
+ 		set password=#{password}
+ 		where userid=#{userid}
+ 	</update> 
+	<!-- 修改用户 -->
+ 	<update id="editUserInfo" parameterType="pd" > 
+		update  <include refid="usersTable"/>
+ 			set username = #{username}
+				<if test="usertype != null and usertype != ''">
+				,usertypes = #{usertype}
+				</if> 
+				<if test="roleid != null and roleid != ''">
+				,roleid = #{roleid}
+				</if> 
+				<if test="loginid != null and loginid != ''">
+				,loginid = #{loginid}
+				</if> 
+				<if test="linktel != null and linktel != ''">
+				,linktel = #{linktel}
+				</if> 
+				<if test="linkaddr != null and linkaddr != ''">
+				,linkaddr = #{linkaddr} 
+				</if> 
+				<if test="isuse != null and isuse != ''">
+				,isuse = #{isuse} 
+				</if> 
+				<if test="lastdate != null and lastdate != ''">
+				,lastdate = #{lastdate} 
+				</if> 
+				<if test="note != null and note != ''">
+				,note = #{note} 
+				</if> 
+				<if test="aid != null and aid != ''">
+				,aid = #{aid} 
+				</if> 
+			where  
+				userid = #{userid}
+ 	</update>
+ 	<update id="editUser" parameterType="pd" > 
+		update  <include refid="usersTable"/>
+ 			set username = #{username}
+				<if test="usertype != null and usertype != ''">
+				,usertypes = #{usertype}
+				</if> 
+				<if test="roleid != null and roleid != ''">
+				,roleid = #{roleid}
+				</if> 
+				<if test="password != null and password != ''">
+				,password = #{password}
+				</if> 
+<!-- 				<if test="usex != null and usex != ''"> -->
+<!-- 				,usex = #{usex} -->
+<!-- 				</if>  -->
+				<if test="linktel != null and linktel != ''">
+				,linktel = #{linktel} 
+				</if> 
+<!-- 				<if test="uemail != null and uemail != ''"> -->
+<!-- 				,uemail = #{uemail}  -->
+<!-- 				</if>  -->
+<!-- 				<if test="qq != null and qq != ''"> -->
+<!-- 				,qq = #{qq}  -->
+<!-- 				</if>  -->
+<!-- 				<if test="ucardid != null and ucardid != ''"> -->
+<!-- 				,ucardid = #{ucardid}  -->
+<!-- 				</if>  -->
+				<if test="linkaddr != null and linkaddr != ''">
+				,linkaddr = #{linkaddr} 
+				</if> 
+				<if test="isuse != null and isuse != ''">
+				,isuse = #{isuse} 
+				</if> 
+				<if test="lastdate != null and lastdate != ''">
+				,lastdate = #{lastdate} 
+				</if> 
+				<if test="note != null and note != ''">
+				,note = #{note} 
+				</if> 
+				<if test="aid != null and aid != ''">
+				,aid = #{aid} 
+				</if> 
+			where  
+				loginid = #{loginid}
+ 	</update>
+ 	<!-- 修改用户角色 -->
+ 	<update id="editRole" parameterType="pd" > 
+		update  <include refid="usersTable"/>
+ 			set roleid = #{roleid}
+			where  
+				userid = #{userid}
+ 	</update>  
+ 	<!-- 修改用户账号可用状态 -->
+ 	<update id="editIsenabled" parameterType="pd" > 
+		update  <include refid="usersTable"/>
+ 			set isuse = #{isuse}				
+			where  
+				userid = #{userid}
+ 	</update> 
+	<delete id="deleteUI" parameterType="String" flushCache="false">
+		delete from <include refid="usersTable"></include>
+		where userid = #{userid}
+	</delete>
+	<select id="getUserByAidlist" parameterType="pd" resultType="pd" >
+		SELECT u.userid as userid,
+				usertypes,
+				loginid,
+				password,
+				username,
+				usex,
+				linktel,
+				uemail,
+				qq,
+				ucardid,
+				linkaddr,
+				u.note as note,
+				aid ,
+				roleid,
+				isuse,
+				lastdate,
+				type,
+				rname,
+				
+				roletype,
+				menurights,
+				buttonrights
+		from <include refid="usersTable"/> u
+		LEFT JOIN <include refid="roleTable"/> r on u.roleid = r.rid
+		<where>
+			<choose>
+				<when test="rid !=null and rid!='' and rid==1"></when><!-- 超级管理员查询所有列表 -->
+				<otherwise>
+					<choose>
+						<when test="aid !=null and aid!=''" >
+							and aid like  CONCAT(#{aid},'%')
+						</when>
+						<otherwise>and aid is null</otherwise>
+					</choose>
+				</otherwise>
+			</choose>
+			and type=0
+		</where>
+		order by u.userid desc
+	</select>
+</mapper>
