@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="MessageMapper">
+	<!-- 字段 -->
+	<sql id="Field">
+              smid,
+              smobile,
+              tid,
+              scontent,
+              sendtime,
+              issend,
+              remark
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		 #{smid},    
+	     #{smobile},
+	     #{tid},
+	     #{scontent},
+	     #{sendtime},
+	     #{issend},
+	     #{remark}
+
+	</sql>
+		<!-- 字段 -->
+	<sql id="receiveField">
+              rmid,
+              rmobile,
+              tid,
+              rcontent,
+              recivedtime,
+              isread,
+              remark
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="receiveFieldValue">
+		 #{rmid},    
+	     #{rmobile},
+	     #{tid},
+	     #{rcontent},
+	     #{recivedtime},
+	     #{isread},
+	     #{remark}
+
+	</sql>
+	<!--表名 -->
+	<sql id="tableName">
+		sendmessages
+	</sql>
+		
+	<sql id="terminaltableName">
+		terminals
+	</sql>
+		
+	<!--查询发件箱列表 -->
+	<select id="getSendMessagePage" parameterType="page" resultType="pd" >
+		SELECT 
+		 smid,
+              smobile,
+              s.tid as tid,
+              tname,
+              scontent,
+              sendtime,
+              issend,
+              remark			  
+		from 
+			<include refid="tableName"></include> s
+			 LEFT JOIN <include refid="terminaltableName"></include> t on t.tid=s.tid			
+		<where>		
+		     <if test="pd.tid != null and pd.tid != ''">
+				and s.tid = #{pd.tid}
+			</if>
+			<if test="pd.tnamekey != null and pd.tnamekey != ''"> 
+ 				and tname LIKE CONCAT(CONCAT('%', #{pd.tnamekey}),'%')
+ 			</if> 
+			<if test="pd.issend != null and pd.issend != ''">
+				and issend =#{pd.issend}
+			</if>	
+			<if test="pd.lastLoginStart!=null and pd.lastLoginStart!=''"><!-- 时间检索 -->
+			and sendtime &gt;= #{pd.lastLoginStart} 
+		</if>
+		<if test="pd.lastLoginEnd!=null and pd.lastLoginEnd!=''"><!-- 时间检索 -->
+			and sendtime &lt;= #{pd.lastLoginEnd} 
+		</if>
+		</where>
+			order by sendtime desc
+	</select>
+	
+	
+	<insert id="addSendMessage" parameterType="pd" >
+		insert into <include refid="tableName"></include>
+		(smobile,
+              tid,
+              scontent,
+              sendtime,
+              issend,
+              remark) 
+		values
+		(#{smobile} ,
+             #{tid} ,
+             #{scontent} ,
+              #{sendtime} ,
+             #{issend} ,
+             #{remark} )
+	</insert>
+	
+</mapper>

@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="OrganizationMapper">
+	<!-- 字段 -->
+	<sql id="Field">
+		tid,
+		aid,
+		userid,
+		tname,
+		address,
+		note,
+		phone,
+		facid,
+		comstand,
+		broadtel,
+		broadfre,
+		manager,
+		managertel,
+		intertime,
+		createdtime,
+		isuse
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{tid},
+		#{aid},
+		#{userid},
+		#{tname},
+		#{address},
+		#{note},
+		#{phone},
+		#{facid},
+		#{comstand},
+		#{broadtel},
+		#{broadfre},
+		#{manager},
+		#{managertel},
+		#{intertime},
+		#{createdtime},
+		#{isuse}
+	</sql>
+	
+	<!--表名 -->
+	<sql id="tableName">
+		terminals
+	</sql>
+	<sql id="tabledataName">
+		terminalsdata
+	</sql>
+	<sql id="areatableName">
+		area
+	</sql>
+	<sql id="usertable">
+		users
+	</sql>
+		
+	<!--根据用户编号列表查询节目单及终端 -->
+	<select id="getOrgnzlistPage" parameterType="Page" resultType="Organization">
+		select  DISTINCT
+			tid,
+			o.aid as aid,
+			aname,
+			o.userid as userid,
+			username,
+			tname,
+			address,
+			a.note as note,
+			phone,
+			facid,
+			comstand,
+			broadtel,
+			broadfre,
+			manager,
+			managertel,
+			intertime,
+			createdtime,
+			o.isuse as isuse
+		from 
+			(<include refid="tableName"></include> o
+			left join <include refid="areatableName"></include> a on o.aid = a.aid)
+			left join <include refid="usertable"></include> u on o.userid = u.userid
+		<where>
+			<if test="pd.imeikey != null and pd.imeikey != ''"> 
+					and tid LIKE CONCAT(CONCAT('%', #{pd.imeikey}),'%') 
+			</if> 
+			<if test="pd.isusekey != null and pd.isusekey != ''"> 
+					and o.isuse =#{pd.isusekey}
+			</if> 
+			<if test="pd.aid != null and pd.aid != ''"> 
+					and o.aid = #{pd.aid}
+			</if> 
+		</where>
+		
+	</select>
+	
+	<!--根据区域编号查询机构列表 -->
+	<select id="listAllOrgnzByAid" parameterType="String" resultType="pd">
+		select  
+			tid,
+			o.aid as aid,
+			aname,
+			o.userid as userid,
+			username,
+			tname,
+			address,
+			a.note as note,
+			phone,
+			facid,
+			comstand,
+			broadtel,
+			broadfre,
+			manager,
+			managertel,
+			intertime,
+			createdtime,
+			o.isuse as isuse
+		from 
+			(<include refid="tableName"></include> o
+			left join <include refid="areatableName"></include> a on o.aid = a.aid)
+			left join <include refid="usertable"></include> u on o.userid = u.userid
+		where o.aid = #{aid}
+	</select>
+	<!--查询所有机构列表 -->
+	<select id="listAllOrgnz" parameterType="Page" resultType="Organization">
+		select  
+			tid,
+			o.aid as aid,
+			aname,
+			o.userid as userid,
+			username,
+			tname,
+			address,
+			a.note as note,
+			phone,
+			facid,
+			comstand,broadtel,broadfre,manager,managertel,intertime,createdtime,o.isuse as isuse
+		from 
+		(<include refid="tableName"></include> o
+			left join <include refid="areatableName"></include> a on o.aid = a.aid)
+			left join <include refid="usertable"></include> u on o.userid = u.userid
+	</select>
+	
+	<select id="listAll" parameterType="String" resultType="pd">
+		select  
+			tid,
+			o.aid as aid,
+			aname,
+			o.userid as userid,
+			username,
+			tname,
+			address,
+			a.note as note,
+			phone,
+			facid,
+			comstand,broadtel,broadfre,manager,managertel,intertime,createdtime,o.isuse as isuse
+		from 
+		(<include refid="tableName"></include> o
+			left join <include refid="areatableName"></include> a on o.aid = a.aid)
+			left join <include refid="usertable"></include> u on o.userid = u.userid
+	</select>
+	
+	<!--通过ID获取机构 -->
+	<select id="getOrgnzByOid" parameterType="String" resultType="Organization">
+		select  
+			<include refid="Field"></include>
+		from 
+			<include refid="tableName"></include>
+		where tid = #{tid} 
+	</select>
+	<!--新增区域 -->
+	<insert id="insertOrgnz" parameterType="Organization">
+		insert into 
+			<include refid="tableName"></include> 
+		(
+			<include refid="Field"></include>
+		) values (
+			<include refid="FieldValue"></include>
+		)
+	</insert>
+	
+	<!--取父区域下最大机构编号-->
+	<select id="findCurLevelMaxId" parameterType="pd" resultType="pd">
+		select count(tid) count from 
+		<include refid="tableName"></include>
+		where aid=#{aid}
+	</select>
+	
+	<!--删除机构-->
+	<delete id="deleteOrgnzByOid" parameterType="String">
+		delete from 
+		<include refid="tableName"></include> 
+		where tid=#{tid} 
+	</delete>
+	
+	<!-- 批量删除用户 -->
+	<delete id="deleteAllOS" parameterType="String" >
+		delete from <include refid="tableName"></include>
+		where 
+			tid in
+  			 <foreach item="item" index="index" collection="array" open="(" separator="," close=")">
+                  #{item}
+             </foreach>
+	</delete>
+	
+	<!--编辑机构 -->
+	<update id="updateOrgnz" parameterType="pd">
+		update 
+		<include refid="tableName"></include> 
+		set 
+			tname=#{tname},
+			address=#{address},
+			note=#{note},
+			facid=#{facid},
+			phone=#{phone},
+			comstand=#{comstand},
+			broadtel=#{broadtel},
+			broadfre=#{broadfre},
+			manager=#{manager},
+			managertel=#{managertel},
+			intertime=#{intertime},
+			createdtime=#{createdtime},
+			isuse=#{isuse}
+		where 
+			tid=#{tid}
+	</update>
+	
+	<select id="getOrgnzByTnamePage" parameterType="page" resultType="pd">
+		select 
+		tid,o.aid as aid,aname,userid,tname,address,a.note as note,phone,facid,comstand,broadtel,broadfre,manager,managertel,intertime,createdtime,isuse
+		from 
+		    <include refid="tableName"></include> o,
+		    <include refid="areatableName"></include> a
+		     where o.aid=a.aid 	
+		<if test="pd.tnamekey != null and pd.tnamekey != ''"> 
+				and tname LIKE CONCAT(CONCAT('%', #{pd.tnamekey}),'%') 
+		</if> 
+	</select>
+	<select id="getTerInfoBytids" parameterType="pd" resultType="pd">
+		select  
+	        t.tid as tid,
+			tname,
+			t.aid as aid,aname,
+			t.userid as userid,username,
+			t.isuse as isuse
+	      from	(<include refid="tableName"></include> t 
+			left join <include refid="areatableName"></include> a on t.aid = a.aid)
+			left join <include refid="usertable"></include> u on t.userid = u.userid
+		<where>
+		<if test="terlist!=null and terlist!='' and terlist.size>0">
+			t.tid in
+			<foreach collection="terlist" index="index" item="item" open="(" separator="," close=")">
+				${item}
+			</foreach>
+		</if>
+		</where>
+	</select>
+	<!--根据分组编号列表查询终端列表-->
+	<select id="listTersByAids" parameterType="pd" resultType="Organization">
+		select  
+			tid,tname,t.aid as aid,aname,t.userid as userid,username,facid,address,t.note as note,comstand,broadtel,manager,managertel,intertime,createdtime,t.isuse as isuse,phone,fmfrequency,rds,trafficlimit
+		from 
+		(<include refid="tableName"></include> t
+			left join <include refid="areatableName"></include> a on t.aid = a.aid)
+			left join <include refid="usertable"></include> u on t.userid = u.userid
+		<where>
+		<choose>
+				<when test="rid !=null and rid!='' and rid==1"></when><!-- 超级管理员查询所有列表 -->
+				<when test="aid !=null and aid!=''" >
+					and t.aid like  CONCAT(#{aid},'%')
+				</when>
+				<otherwise>and t.aid is null</otherwise>
+			</choose>
+		</where>
+	</select>
+	<update id="setTerIsuse" parameterType="String">
+		update 
+		<include refid="tableName"></include> 
+		set isuse=1
+		where  tid=#{tid}
+	</update>
+	
+	
+	
+
+</mapper>

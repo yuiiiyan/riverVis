@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="WarnMapper">
+	<!--表名 -->
+	<sql id="warnTable">
+		warnset
+	</sql>
+	
+	
+	<sql id="areaTable">
+		area
+	</sql>
+<!-- 获取预警列表(分页) -->
+	<select id="getWarnlistPage" parameterType="page" resultType="Warn" >
+		SELECT 
+		       w.wid as wid,
+		       w.aid as aid,
+		       w.data as data, 
+			   w.aname as aname,
+				leveal,
+				content
+		from <include refid="warnTable"/> w 		
+		LEFT JOIN <include refid="areaTable"/> ra on w.aid = ra.aid
+		<where>
+			<if test="pd.anamekey != null and pd.anamekey != ''">
+				and w.aname LIKE CONCAT(CONCAT('%', #{pd.anamekey}),'%')
+			</if> 
+			<if test="pd.leveal != null and pd.leveal != ''">
+				and leveal =#{pd.leveal}
+			</if> 
+			
+		</where> 
+	</select>
+	
+	<!-- 通过wid获取数据 -->
+	<select id="findByWid" parameterType="pd" resultType="Warn" >
+		SELECT 
+		       w.wid as wid,
+		       w.aid as aid,
+		       w.aname as aname,
+				 content,
+				leveal,
+				w.data as data
+				
+		from <include refid="warnTable"/> w 		
+		LEFT JOIN <include refid="areaTable"/> ra on w.aid = ra.aid
+		where 
+			w.wid = #{wid}
+	</select>
+	
+<!-- 新增终端用户信息 -->
+ 	<insert id="insertWarnInfo" parameterType="pd" > 
+ 		insert into <include refid="warnTable"></include> ( 
+			     aid,
+				 aname,
+				 content,
+				 leveal,
+				 data
+		) values (
+			#{aid},#{aname},#{content},#{leveal},#{data}
+			
+		)
+ 	</insert>
+<!-- 修改用户 -->
+ 	<update id="editWarnInfo" parameterType="pd" > 
+		update  <include refid="warnTable"/>
+ 			set 
+ 				aname = #{aname}
+				<if test="aid != null and aid != ''">
+				,aid = #{aid} 
+				</if> 
+				<if test="leveal != null and leveal != ''">
+				,leveal = #{leveal}
+				</if> 
+				<if test="data != null and data != ''">
+				,data = #{data}
+				</if> 
+				<if test="content != null and content != ''">
+				,content = #{content}
+				</if> 								
+			where  
+				wid = #{wid}
+ 	</update>
+ 	
+ 		<delete id="deleteWI" parameterType="String" flushCache="false">
+		delete from <include refid="warnTable"></include>
+		where wid = #{wid}
+	</delete>
+	
+	<!-- 预警测试 -->
+		<!-- 通过wid获取数据 -->
+	<select id="findwid" parameterType="int" resultType="Warn" >
+		SELECT 
+		       w.wid as wid,
+		       w.aid as aid,
+		       w.aname as aname,
+				 content,
+				leveal,
+				w.data as data
+				
+		from <include refid="warnTable"/> w 		
+		LEFT JOIN <include refid="areaTable"/> ra on w.aid = ra.aid
+		where 
+			w.wid = #{wid}
+	</select>
+</mapper>

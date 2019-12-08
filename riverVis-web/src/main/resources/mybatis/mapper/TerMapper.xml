@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TerMapper">
+	<!-- 字段 -->
+	<sql id="Field">
+		tid,
+		tname,
+		aid,
+		userid,
+		facid,
+		address,
+		note,
+		comstand,
+		broadtel,
+		broadfre,
+		manager,
+		managertel,
+		intertime,
+		createdtime,
+		isuse,
+		phone,
+		lasttime
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{tid},
+		#{tname},
+		#{aid},
+		#{userid},
+		#{facid},
+		#{address},
+		#{note},
+		#{comstand},
+		#{broadtel},
+		#{broadfre},
+		#{manager},
+		#{managertel},
+		#{intertime},
+		#{createdtime},
+		#{isuse},
+		#{phone},
+		#{lasttime}
+	</sql>
+	
+	<!--表名 -->
+	<sql id="tableName">
+		terminals
+	</sql>
+	<sql id="areatableName">
+		Area
+	</sql>
+	<sql id="usertable">
+		users
+	</sql>
+	<!--根据区域编号查询机构列表 -->
+	<select id="listAllTerByAid" parameterType="String" resultType="pd">
+		select  
+			tid,tname,userid,t.aid as aid,userid,username,aname,phone,address,facnum,usernum,comstand,broadtel,broadfre,manager,managertel,intertime,createdtime,isuse,remark
+		from 
+			(<include refid="tableName"></include> t LEFT JOIN <include refid="areatableName"></include> a on t.aid=a.aid)
+			left join <include refid="usertable"></include> ui on ui.userid = t.userid
+		where t.aid = #{aid}
+	</select>
+	<!--根据分组编号列表查询终端列表-->
+	<select id="listTersByAids" parameterType="pd" resultType="Terminal">
+		select  
+			<include refid="Field"></include>
+		from 
+			<include refid="tableName"></include> 
+		<where>
+		<if test="aidlist!=null and aidlist!='' and aidlist.size>0">
+			aid in
+			<foreach collection="aidlist" index="index" item="item" open="(" separator="," close=")">
+				${item}
+			</foreach>
+		</if>
+		</where>
+	</select>
+	<!--查询所有列表 -->
+	<select id="listAllTer" parameterType="String" resultType="pd">
+		select  
+			tid,tname,userid,t.aid as aid,userid,username,aname,phone,address,facnum,usernum,comstand,broadtel,broadfre,manager,managertel,intertime,createdtime,isuse,remark
+		from 
+			(<include refid="tableName"></include> t LEFT JOIN <include refid="areatableName"></include> a on t.aid=a.aid)
+			left join <include refid="usertable"></include> ui on ui.userid = t.userid
+	</select>
+	
+	<!--通过ID获取 -->
+	<select id="getTerByTid" parameterType="String" resultType="Terminal">
+		select  
+			tid,tname,userid,t.aid as aid,userid,username,aname,phone,address,facnum,usernum,comstand,broadtel,broadfre,manager,managertel,intertime,createdtime,isuse,remark
+		from 
+			(<include refid="tableName"></include> t LEFT JOIN <include refid="areatableName"></include> a on t.aid=a.aid)
+			left join <include refid="usertable"></include> ui on ui.userid = t.userid
+		where tid = #{tid} 
+	</select>
+	<!--新增-->
+	<insert id="insertTer" parameterType="Terminal">
+		insert into 
+			<include refid="tableName"></include> 
+		(
+			<include refid="Field"></include>
+		) values (
+			<include refid="FieldValue"></include>
+		)
+	</insert>
+	
+	<!--取最大ID-->
+	<select id="findMaxId" parameterType="pd" resultType="pd">
+		select MAX(tid) TID from 
+		<include refid="tableName"></include>
+	</select>
+	
+	<!--删除-->
+	<delete id="deleteTerByTid" parameterType="String">
+		delete from 
+		<include refid="tableName"></include> 
+		where tid=#{tid} 
+	</delete>
+	
+	<!--编辑 -->
+	<update id="updateTer" parameterType="pd">
+		update 
+		<include refid="tableName"></include> 
+		set tid=#{tid},
+		    tname=#{tname},
+			userid=#{userid},
+			aid=#{aid},
+<!-- 			aname=#{aname}, -->
+			phone=#{phone},
+			address=#{address},
+			facnum=#{facnum},
+			usernum=#{usernum},
+			comstand=#{comstand},
+			broadtel=#{broadtel},
+			broadfre=#{broadfre},
+			manager=#{manager},
+			managertel=#{managertel},
+			intertime=#{intertime},
+			createdtime=#{createdtime},
+			isuse=#{isuse},
+			remark=#{remark}
+		where 
+			tid=#{oldtid}
+	</update>
+</mapper>

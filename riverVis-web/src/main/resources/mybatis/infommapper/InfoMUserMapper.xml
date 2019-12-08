@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE com.infopublic.mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<com.infopublic.mapper namespace="InfoMUserMapper">
+
+	<resultMap type="InfoMUser" id="userAllInfoResultMap">
+		<id column="userid" property="userid"/>
+		<result column="usid" property="usid"/>
+		<result column="aid" property="aid"/>
+		<result column="aname" property="aname"/>
+		<result column="rid" property="rid"/>
+		<result column="rname" property="rname"/>
+		<result column="oid" property="oid"/>
+		<result column="oname" property="oname"/>
+		<result column="ischecked" property="ischecked"/>
+		<result column="checkpasstime" property="checkpasstime"/>
+		<result column="isaccredit" property="isaccredit"/>
+		<result column="isenabled" property="isenabled"/>
+		<association property="userinfo" column="userid" javaType="InfoMUserInfo">
+			<id column="userid" property="userid"/>
+			<result column="uname" property="uname"/>
+			<result column="password" property="password"/>
+			<result column="username" property="username"/>
+			<result column="usex" property="usex"/>
+			<result column="uphone" property="uphone"/>
+			<result column="uemail" property="uemail"/>
+			<result column="qq" property="qq"/>
+			<result column="ucardid" property="ucardid"/>
+			<result column="uaddress" property="uaddress"/>
+			<result column="companytype" property="companytype"/>
+			<result column="companyname" property="companyname"/>
+			<result column="companyaddress" property="companyaddress"/>
+			<result column="note" property="note"/>
+		</association>
+	</resultMap>
+	<!--表名 -->
+	<sql id="userinfoTable">
+		userinfo
+	</sql>
+	<sql id="usersetTable">
+		userset
+	</sql>
+	<sql id="areaTable">
+		area
+	</sql>
+	<sql id="roleTable">
+		role
+	</sql>
+	<sql id="organizationTable">
+		organization
+	</sql>
+	<sql id="mapTable">
+		map
+	</sql>
+	<!-- userinfo字段 -->
+	<sql id="userinfoField">
+		userid,
+		username,
+		password,
+		uname,
+		usex,
+		uphone,
+		webchat,
+		uemail,
+		qq,
+		ucardid,
+		uaddress,
+		companytype,
+		companyname,
+		companyaddress,
+		note
+	</sql>
+	
+	<!-- userinf字段值 -->
+	<sql id="userinfoFieldValue">
+		#{userid},
+		#{username},
+		#{password},
+		#{uname},
+		#{usex},
+		#{uphone},
+		#{webchat},
+		#{uemail},
+		#{qq},
+		#{ucardid},
+		#{uaddress},
+		#{companytype},
+		#{companyname},
+		#{companyaddress},
+		#{note}
+	</sql>
+	<!-- userset字段 -->
+	<sql id="usersetField">
+		usid,
+		userid,
+		aid,
+		rid,
+		oid,
+		menurights,
+		buttonrights,
+		skin,
+		ischecked,
+ 		applyrole, 
+		isaccredit,
+		unpassreason,
+		isenabled
+	</sql>
+	
+	<!-- userset字段值 -->
+	<sql id="usersetFieldValue">
+		#{usid},
+		#{userid},
+		#{aid},
+		#{rid},
+		#{oid},
+		#{menurights},
+		#{buttonrights},
+		#{skin},
+		#{ischecked},
+		#{applyrole}, 
+		#{isaccredit},
+		#{unpassreason},
+		#{isenabled}
+	</sql>
+	<!-- 通过userid获取数据 -->
+	<select id="findByUserid" parameterType="pd" resultMap="userAllInfoResultMap" >
+		SELECT ui.userid as userid,
+				username,
+				password,
+				uname,
+				usex,
+				uphone,
+				webchat,
+				uemail,
+				qq,
+				ucardid,
+				uaddress,
+				companytype,
+				companyname,
+				companyaddress,
+				ui.note as note,
+				usid,
+				us.aid as aid,
+				aname,
+				us.rid as rid,
+				us.oid as oid,
+				oname,
+				us.menurights as menurights,
+				us.buttonrights as buttonrights,
+				skin,
+				ischecked,
+				checkpasstime,
+ 				applyrole, 
+				isaccredit,
+				unpassreason,
+				us.isenabled as isenabled,
+				rname,
+				r.menurights as rolemenurights ,
+				r.buttonrights as rolebuttonrights 
+		from (((<include refid="userinfoTable"/> ui 
+		LEFT JOIN <include refid="usersetTable"/> us  on ui.userid = us.userid)
+		LEFT JOIN <include refid="roleTable"/> r on us.rid = r.rid) 
+		LEFT JOIN <include refid="areaTable"/> a on us.aid = a.aid) 
+		LEFT JOIN <include refid="organizationTable"/> o on us.oid = o.oid
+		where 
+			us.userid = #{userid}
+	</select>
+	<!-- 通过区域编号和姓名获取用户列表(分页) -->
+	<select id="getUserslistPage" parameterType="page" resultMap="userAllInfoResultMap" >
+		SELECT ui.userid as userid,
+				username,
+				password,
+				uname,
+				usex,
+				uphone,
+				webchat,
+				uemail,
+				qq,
+				companytype,
+				companyname,
+				companyaddress,
+				us.aid as aid,
+				aname,
+				oname,
+				ischecked,
+				checkpasstime,
+ 				applyrole, 
+				isaccredit,
+				us.isenabled as isenabled,
+				rname,
+				us.rid as rid
+		from ((((<include refid="userinfoTable"/> ui 
+		LEFT JOIN <include refid="mapTable"/> m  on ui.userid = m.userid)
+		LEFT JOIN <include refid="usersetTable"/> us  on ui.userid = us.userid)
+		LEFT JOIN <include refid="roleTable"/> r on us.rid = r.rid) 
+		LEFT JOIN <include refid="areaTable"/> a on us.aid = a.aid) 
+		LEFT JOIN <include refid="organizationTable"/> o on us.oid = o.oid
+		<where>
+			<choose>
+				<when test="pd.aidlist!=null and pd.aidlist!='' and pd.aidlist.size>0">
+					and us.aid in 
+					<foreach collection="pd.aidlist" index="index" item="item" open="(" separator="," close=")">
+			            ${item}
+			        </foreach>
+			        or 	us.aid is null
+				</when>
+				<otherwise>and us.aid is null</otherwise>
+			</choose>
+			<if test="pd.unamekey != null and pd.unamekey != ''">
+				and uname LIKE CONCAT(CONCAT('%', #{pd.unamekey}),'%')
+			</if> 
+			<if test="pd.oidkey != null and pd.oidkey != ''">
+				and us.oid =#{pd.oidkey}
+			</if>
+				and ischecked=4 
+				order by checkpasstime desc
+		</where> 
+	</select>
+	<!-- 通过id列表获取用户信息 -->
+	<select id="getUsersByIdlist" parameterType="pd" resultType="pd" >
+		SELECT ui.userid as userid,
+				username as loginid,
+				password,
+				uname as username,
+<!-- 				usex, -->
+				uphone as linktel,
+<!-- 				uemail, -->
+<!-- 				qq, -->
+<!-- 				ucardid, -->
+				uaddress as linkaddr,
+				ui.note as note,
+				us.aid as aid,
+				us.isenabled as isuse
+		from <include refid="userinfoTable"/> ui 
+		LEFT JOIN <include refid="usersetTable"/> us  on ui.userid = us.userid
+		<where>
+			<choose>
+				<when test="idlist!=null and idlist!='' and idlist.size>0">
+					and ui.userid in 
+					<foreach collection="idlist" index="index" item="item" open="(" separator="," close=")">
+			            '${item}'
+			        </foreach>
+				</when>
+				<otherwise>and ui.userid is null</otherwise>
+			</choose>
+				and ischecked=4 
+				order by checkpasstime desc
+		</where> 
+	</select>
+	<!-- 通过区域编号和姓名获取用户列表(全部) -->
+	<select id="getUsersByAIdlist" parameterType="pd" resultMap="userAllInfoResultMap" >
+		SELECT ui.userid as userid,
+				username,
+				password,
+				uname,
+				usex,
+				uphone,
+				webchat,
+				uemail,
+				qq,
+				companytype,
+				companyname,
+				companyaddress,
+				aname,
+				oname,
+				us.aid as aid,
+				ischecked,
+				checkpasstime,
+				applyrole,
+				isaccredit,
+				us.isenabled as isenabled,
+				rname,
+				us.rid as rid,
+				openid
+		from (((<include refid="userinfoTable"/> ui 
+		LEFT JOIN <include refid="usersetTable"/> us  on ui.userid = us.userid)
+		LEFT JOIN <include refid="roleTable"/> r on us.rid = r.rid) 
+		LEFT JOIN <include refid="areaTable"/> a on us.aid = a.aid) 
+		LEFT JOIN <include refid="organizationTable"/> o on us.oid = o.oid
+		<where>
+			<choose>
+				<when test="aidlist!=null and aidlist!='' and aidlist.size>0">
+					and us.aid in 
+					<foreach collection="aidlist" index="index" item="item" open="(" separator="," close=")">
+			            ${item}
+			        </foreach>	
+				</when>
+				<otherwise>and us.aid is null</otherwise>
+			</choose>
+			<if test="unamekey != null and unamekey != ''">
+				and uname LIKE CONCAT(CONCAT('%', #{unamekey}),'%')
+			</if> 
+			<if test="oidkey != null and oidkey != ''">
+				and us.oid =#{oidkey}
+			</if>
+		</where>
+	</select>
+	<select id="getUseridByUsername" parameterType="String" resultType="String">
+		select userid from <include refid="userinfoTable"></include> 
+		where username=#{username}
+	</select>
+</com.infopublic.mapper>

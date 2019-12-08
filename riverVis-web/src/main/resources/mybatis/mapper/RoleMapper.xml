@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="RoleMapper">
+	
+	
+	<!-- 字段 -->
+	<sql id="Field">
+		rid,
+		rname,
+		roletype,
+		menurights,
+		buttonrights,
+		note
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		#{rid},
+		#{rname},
+		#{roletype},
+		#{menurights},
+		#{buttonrights},
+		#{note}
+	</sql>
+	
+	<!--表名 -->
+	<sql id="tableName">
+		role
+	</sql>
+	
+	<!-- 列出所有角色 分页-->
+	<select id="listAllRoleslistPage" parameterType="Page" resultType="Role">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		<where>
+			<if test="pd.namekey !=null and pd.namekey!=''">
+				and rname LIKE CONCAT(CONCAT('%', #{pd.namekey}),'%')
+			</if>
+		</where>
+		ORDER BY rid desc
+	</select>
+	<!-- 列出所有角色 -->
+	<select id="listAllRoles" resultType="Role">
+		select
+		<include refid="Field"></include>
+		from
+		<include refid="tableName"></include>
+		ORDER BY rid 
+	</select>
+	<!-- 新增 -->
+ 	<insert id="addRole" parameterType="pd" > 
+ 		insert into <include refid="tableName"></include> ( 
+ 		rname,
+		roletype,note
+		) values (
+		#{rname},
+		#{roletype},
+		#{note}
+		)
+ 	</insert>
+	<!-- 修改 -->
+ 	<update id="editRole" parameterType="pd" > 
+		update  <include refid="tableName"/>
+ 			set rname = #{rname}
+				<if test="roletype != null and roletype != ''">
+				,roletype = #{roletype}
+				</if> 
+				<if test="note != null and note != ''">
+				,note = #{note}
+				</if> 
+			where  
+				rid = #{rid}
+ 	</update>
+	<!-- 授权 -->
+ 	<update id="editRoleRights" parameterType="pd" > 
+		update  <include refid="tableName"/>
+ 			set menurights = #{menurights}
+			where  
+				rid = #{rid}
+ 	</update>
+	<delete id="deleteRole" parameterType="String" flushCache="false">
+		delete from <include refid="tableName"></include>
+		where rid = #{rid}
+	</delete>
+</mapper>

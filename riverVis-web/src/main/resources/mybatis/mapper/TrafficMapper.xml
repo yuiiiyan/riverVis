@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="TrafficMapper">
+	<!-- 字段 -->
+	<sql id="Field">
+		 ttid,    
+	     tid,
+	     usetraffic,
+	     lasttime,
+	     remark
+	</sql>
+	
+	<!-- 字段值 -->
+	<sql id="FieldValue">
+		 #{ttid},    
+	     #{tid},
+	     #{usetraffic},
+	     #{lasttime},
+	     #{remark}
+	</sql>
+	
+	<!--表名 -->
+	<sql id="tableName">
+		terminal_traffic
+	</sql>
+	<sql id="terminaltable">
+		terminals
+	</sql>
+	<sql id="areatable">
+		area
+	</sql>
+	<sql id="usertable">
+		users
+	</sql>
+	<!--查询列表（分页） -->
+	<select id="getTrafficlistPage" parameterType="Page" resultType="pd">
+		select  
+			ttid,    
+		     tt.tid as tid,
+		     usetraffic,
+		     tt.lasttime as lasttime,
+		     remark,
+		     tname,
+		     trafficlimit,
+		     t.aid as aid,
+		     aname,
+		     ui.userid as userid,
+		     t.isuse as isuse,
+		     username
+		from 
+			((<include refid="tableName"></include> tt  JOIN <include refid="terminaltable"></include> t on tt.tid=t.tid)
+			left join <include refid="areatable"></include> a on t.aid = a.aid)
+			left join <include refid="usertable"></include> ui on ui.userid = t.userid
+		<where>
+			<choose>
+<!-- 				<when test="pd.terids !=null and pd.terids!='' and pd.terids.size>0"> -->
+<!-- 					and tt.tid in  -->
+<!-- 					<foreach collection="pd.terids" index="index" item="item" open="(" separator="," close=")"> -->
+<!-- 			            '${item}' -->
+<!-- 			        </foreach>	 -->
+<!-- 				</when> -->
+				<when test="pd.aidlist !=null and pd.aidlist!='' and pd.aidlist.size>0">
+					and (
+					<foreach collection="pd.aidlist" index="index" item="item" open="" separator="or" close="">
+			           t.aid  LIKE CONCAT( #{pd.aidlist[${index}]} ,'%')
+			        </foreach> )
+				</when>
+				<otherwise>and t.aid is null</otherwise>
+			</choose>
+			<if test="pd.usernamekey != null and pd.usernamekey != ''"> 
+					and ui.username LIKE CONCAT(CONCAT('%', #{pd.usernamekey}),'%') 
+			</if> 
+			<if test="pd.tnamekey != null and pd.tnamekey != ''"> 
+					and t.tname LIKE CONCAT(CONCAT('%', #{pd.tnamekey}),'%') 
+			</if> 
+<!-- 			<if test="pd.groupnamekey != null and pd.groupnamekey != ''">  -->
+<!-- 					and a.aname LIKE CONCAT(CONCAT('%', #{pd.groupnamekey}),'%')  -->
+<!-- 			</if> -->
+			<if test="pd.usestate != null and pd.usestate != ''"> 
+				<choose>
+					<when test="pd.usestate == 0">
+						and usetraffic &lt;= trafficlimit
+					</when>
+					<otherwise>and usetraffic > trafficlimit</otherwise>
+				</choose>
+			</if>
+			<if test="pd.usenumstart !=null and pd.usenumstart !='' ">
+				and usetraffic &gt;= #{pd.usenumstart,jdbcType=INTEGER} 
+			</if>
+			<if test="pd.usenumend !=null and pd.usenumend !='' ">
+				and usetraffic &lt;= #{pd.usenumend,jdbcType=INTEGER} 		
+			</if>
+		</where>
+		order by tt.tid
+	</select>
+	<!--根据编号列表查询列表 -->
+	<select id="getTrafficByIdlist" parameterType="pd" resultType="pd">
+		select  
+			ttid,    
+		     tt.tid as tid,
+		     usetraffic,
+		      tt.lasttime as lasttime,
+		     remark,
+		     tname,
+		     trafficlimit,
+		     t.aid as aid,
+		     aname,
+		     ui.userid as userid,
+		     t.isuse as isuse,
+		     username
+		from 
+			((<include refid="tableName"></include> tt  JOIN <include refid="terminaltable"></include> t on tt.tid=t.tid)
+			left join <include refid="areatable"></include> a on t.aid = a.aid)
+			left join <include refid="usertable"></include> ui on ui.userid = t.userid
+			<where>
+			<choose>
+				<when test="ids !=null and ids!='' and ids.size>0">
+					and ttid in 
+					<foreach collection="ids" index="index" item="item" open="(" separator="," close=")">
+			            ${item}
+			        </foreach>	
+				</when>
+				<otherwise>and ttid is null</otherwise>
+			</choose>
+		</where>
+		order by tt.tid
+	</select>
+	<update id="updateTerTrafficLimit" parameterType="pd">
+		update 	<include refid="terminaltable"></include>
+		set trafficlimit = #{trafficlimit}
+		where tid = #{tid}
+	</update>
+	<update id="updateTerTrafficToZero" parameterType="String">
+		update 	<include refid="tableName"></include>
+		set usetraffic = 0.0
+	</update>
+</mapper>
