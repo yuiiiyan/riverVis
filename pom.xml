@@ -8,6 +8,7 @@
         <module>riverVis-service</module>
         <module>riverVis-entity</module>
         <module>riverVis-web</module>
+        <module>riverVis-common</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
